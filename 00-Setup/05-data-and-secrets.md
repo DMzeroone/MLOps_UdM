@@ -2,12 +2,6 @@
 
 ### Variables de entorno locales con .env
 
-- Copia el archivo de ejemplo a la raíz del proyecto:
-
-```bash
-cp 00-Setup/templates/.env.example .env
-```
-
 - Nunca comitees tu archivo `.env`. La plantilla `.gitignore` proporcionada lo excluye.
 
 ### Cargar variables en Python

@@ -1,6 +1,6 @@
 ## Herramientas: Editor, Linters, Formateadores, Pre-commit
 
-### Editor (VS Code recomendado)
+### Editor (VS Code recomendado -- Free!)
 
 - Instala VS Code: `https://code.visualstudio.com/`
 - Extensiones recomendadas:
