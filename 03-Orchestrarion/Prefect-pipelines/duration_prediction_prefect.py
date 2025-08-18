@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import os
 import pickle
+import logging
 from pathlib import Path
-from typing import Tuple
+from typing import Tuple, Optional
 
 import pandas as pd
 import xgboost as xgb
@@ -11,16 +13,39 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn.metrics import root_mean_squared_error
 
 import mlflow
-from prefect import task, flow
+from prefect import task, flow, get_run_logger
 from prefect.artifacts import create_table_artifact, create_markdown_artifact
 
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-# Configuración de MLflow
-mlflow.set_tracking_uri("http://localhost:5000")
-mlflow.set_experiment("nyc-taxi-experiment-prefect")
+# MLflow configuration with fallback
+def setup_mlflow():
+    """Setup MLflow with proper error handling and fallback options."""
+    mlflow_uri = os.getenv("MLFLOW_TRACKING_URI", "sqlite:///mlflow.db")
+    
+    try:
+        mlflow.set_tracking_uri(mlflow_uri)
+        # Test connection
+        mlflow.search_experiments()
+        logger.info(f"Connected to MLflow at: {mlflow_uri}")
+    except Exception as e:
+        logger.warning(f"Failed to connect to {mlflow_uri}: {e}")
+        logger.info("Falling back to local SQLite database")
+        mlflow.set_tracking_uri("sqlite:///mlflow.db")
+    
+    try:
+        mlflow.set_experiment("nyc-taxi-experiment-prefect")
+    except Exception as e:
+        logger.error(f"Failed to set MLflow experiment: {e}")
+        raise
+
+# Initialize MLflow
+setup_mlflow()
 
 
-@task(name="load_data", description="Load NYC taxi data from parquet files")
+@task(name="load_data", description="Load NYC taxi data from parquet files", retries=3, retry_delay_seconds=10)
 def read_dataframe(year: int, month: int) -> pd.DataFrame:
     """
     Load NYC taxi data for a specific year and month.
@@ -32,8 +57,17 @@ def read_dataframe(year: int, month: int) -> pd.DataFrame:
     Returns:
         Processed DataFrame with duration feature
     """
+    logger = get_run_logger()
+    
     url = f'https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_{year}-{month:02d}.parquet'
-    df = pd.read_parquet(url)
+    logger.info(f"Loading data from: {url}")
+    
+    try:
+        df = pd.read_parquet(url)
+        logger.info(f"Successfully loaded {len(df)} records")
+    except Exception as e:
+        logger.error(f"Failed to load data from {url}: {e}")
+        raise
 
     # Feature engineering
     df['duration'] = df.lpep_dropoff_datetime - df.lpep_pickup_datetime
@@ -66,7 +100,7 @@ def read_dataframe(year: int, month: int) -> pd.DataFrame:
 
 
 @task(name="create_features", description="Create feature matrix using DictVectorizer")
-def create_X(df: pd.DataFrame, dv: DictVectorizer = None) -> Tuple[any, DictVectorizer]:
+def create_features(df: pd.DataFrame, dv: Optional[DictVectorizer] = None) -> Tuple[any, DictVectorizer]:
     """
     Create feature matrix from DataFrame.
 
@@ -77,9 +111,18 @@ def create_X(df: pd.DataFrame, dv: DictVectorizer = None) -> Tuple[any, DictVect
     Returns:
         Tuple of (feature matrix, DictVectorizer)
     """
+    logger = get_run_logger()
+    
     categorical = ['PU_DO']
     numerical = ['trip_distance']
+    
+    # Ensure all required columns exist
+    missing_cols = [col for col in categorical + numerical if col not in df.columns]
+    if missing_cols:
+        raise ValueError(f"Missing required columns: {missing_cols}")
+    
     dicts = df[categorical + numerical].to_dict(orient='records')
+    logger.info(f"Created {len(dicts)} feature dictionaries")
 
     if dv is None:
         dv = DictVectorizer(sparse=True)
@@ -119,9 +162,13 @@ def train_model(X_train, y_train, X_val, y_val, dv: DictVectorizer) -> str:
     Returns:
         MLflow run ID
     """
+    logger = get_run_logger()
+    
     # Ensure models directory exists
     models_folder = Path('models')
     models_folder.mkdir(exist_ok=True)
+    
+    logger.info(f"Training with {X_train.shape[0]} samples, {X_train.shape[1]} features")
 
     with mlflow.start_run() as run:
         train = xgb.DMatrix(X_train, label=y_train)
@@ -152,12 +199,18 @@ def train_model(X_train, y_train, X_val, y_val, dv: DictVectorizer) -> str:
         mlflow.log_metric("rmse", rmse)
 
         # Save preprocessor
-        with open("models/preprocessor.b", "wb") as f_out:
+        preprocessor_path = "models/preprocessor.b"
+        with open(preprocessor_path, "wb") as f_out:
             pickle.dump(dv, f_out)
-        mlflow.log_artifact("models/preprocessor.b", artifact_path="preprocessor")
-
-        # Log model
-        mlflow.xgboost.log_model(booster, artifact_path="models_mlflow")
+        
+        try:
+            mlflow.log_artifact(preprocessor_path, artifact_path="preprocessor")
+            # Log model
+            mlflow.xgboost.log_model(booster, artifact_path="models_mlflow")
+            logger.info("Successfully logged model and preprocessor to MLflow")
+        except Exception as e:
+            logger.warning(f"Failed to log to MLflow: {e}")
+            logger.info("Model artifacts saved locally in models/ directory")
 
         # Create Prefect artifact with model performance
         performance_data = [
@@ -227,8 +280,8 @@ def duration_prediction_flow(year: int, month: int) -> str:
     df_val = read_dataframe(year=next_year, month=next_month)
 
     # Create features
-    X_train, dv = create_X(df_train)
-    X_val, _ = create_X(df_val, dv)
+    X_train, dv = create_features(df_train)
+    X_val, _ = create_features(df_val, dv)
 
     # Prepare targets
     target = 'duration'
@@ -271,14 +324,27 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description='Train a model to predict taxi trip duration using Prefect.')
-    parser.add_argument('--year', type=int, required=True, help='Year of the data to train on')
-    parser.add_argument('--month', type=int, required=True, help='Month of the data to train on')
+    parser.add_argument('--year', type=int, default=2023, help='Year of the data to train on (default: 2023)')
+    parser.add_argument('--month', type=int, default=1, help='Month of the data to train on (default: 1)')
+    parser.add_argument('--mlflow-uri', type=str, help='MLflow tracking URI (overrides environment variable)')
     args = parser.parse_args()
 
-    # Run the flow
-    run_id = duration_prediction_flow(year=args.year, month=args.month)
-    print(f"Pipeline completed! MLflow run_id: {run_id}")
+    # Override MLflow URI if provided
+    if args.mlflow_uri:
+        os.environ["MLFLOW_TRACKING_URI"] = args.mlflow_uri
+        setup_mlflow()
 
-    # Save run ID for reference
-    with open("prefect_run_id.txt", "w") as f:
-        f.write(run_id)
+    try:
+        # Run the flow
+        run_id = duration_prediction_flow(year=args.year, month=args.month)
+        print("\n✅ Pipeline completed successfully!")
+        print(f"📊 MLflow run_id: {run_id}")
+        print(f"🔗 View results at: {mlflow.get_tracking_uri()}")
+
+        # Save run ID for reference
+        with open("prefect_run_id.txt", "w") as f:
+            f.write(run_id)
+            
+    except Exception as e:
+        logger.error(f"Pipeline failed: {e}")
+        raise
