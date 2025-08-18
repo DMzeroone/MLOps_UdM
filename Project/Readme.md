@@ -17,8 +17,8 @@ Para el proyecto, deberás construir un proyecto de ML completo que incluya:
 
 ## Ideas de Proyectos
 
-- Kaggle: <https://www.kaggle.com/datasets?search=machine+learning>, <https://www.kaggle.com/datasets>
 - UC Irvine: <https://archive.ics.uci.edu/datasets/>
+- Kaggle: <https://www.kaggle.com/datasets?search=machine+learning>, <https://www.kaggle.com/datasets>
 - Google Research: <https://datasetsearch.research.google.com/>
 - fivethirtyeight: <https://data.fivethirtyeight.com/>, <https://github.com/fivethirtyeight/data/tree/master>
 - openml: <https://www.openml.org/search?type=data&sort=runs&status=active>
