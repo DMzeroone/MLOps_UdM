@@ -1,9 +1,9 @@
 
-# MLOps Course: Experiment Tracking with MLflow
+# Curso MLOps: Seguimiento de Experimentos con MLflow
 
-This project provides a hands-on introduction to experiment tracking with MLflow, using the NYC Green Taxi Trip dataset as an example.
+Este proyecto proporciona una introducción práctica al seguimiento de experimentos con MLflow, utilizando el conjunto de datos de viajes en taxi verde de NYC como ejemplo.
 
-## Project Structure
+## Estructura del Proyecto
 
 ```
 .
@@ -22,75 +22,75 @@ This project provides a hands-on introduction to experiment tracking with MLflow
 └── README.md
 ```
 
-*   **data/:** Stores the raw and processed dataset.
-*   **notebooks/:** Contains Jupyter notebooks that explain the concepts.
-*   **scripts/:** Contains the Python scripts for data preprocessing and model training.
-*   **mlflow.db:** A SQLite database that serves as the MLflow tracking server.
+* **data/:** Almacena el conjunto de datos crudo y procesado.
+* **notebooks/:** Contiene notebooks de Jupyter que explican los conceptos.
+* **scripts/:** Contiene los scripts de Python para el preprocesamiento de datos y entrenamiento del modelo.
+* **mlflow.db:** Una base de datos SQLite que sirve como servidor de seguimiento de MLflow.
 
-## Getting Started
+## Comenzando
 
-### 1. Installation
+### 1. Instalación
 
-This project uses `uv` for package management. To install the dependencies, run:
+Este proyecto usa `uv` para la gestión de paquetes. Para instalar las dependencias, ejecuta:
 
 ```bash
 uv add "pandas" "scikit-learn" "mlflow" "optuna" "numpy" "pyarrow"
 ```
 
-### 2. Data Preprocessing
+### 2. Preprocesamiento de Datos
 
-First, run the data preprocessing script to download the NYC Green Taxi Trip dataset and prepare it for training:
+Primero, ejecuta el script de preprocesamiento de datos para descargar el conjunto de datos de viajes en taxi verde de NYC y prepararlo para el entrenamiento:
 
 ```bash
 uv run python scripts/preprocess_data.py
 ```
 
-This will download the data to the `data/` directory and save the processed data to `data/processed/`.
+Esto descargará los datos al directorio `data/` y guardará los datos procesados en `data/processed/`.
 
-### 3. Running the Examples
+### 3. Ejecutando los Ejemplos
 
-#### a. Baseline (No Experiment Tracking)
+#### a. Línea Base (Sin Seguimiento de Experimentos)
 
-To train a model without any experiment tracking, run:
+Para entrenar un modelo sin ningún seguimiento de experimentos, ejecuta:
 
 ```bash
 uv run python scripts/train_no_mlflow.py
 ```
 
-This will train a RandomForestRegressor and print the RMSE to the console.
+Esto entrenará un RandomForestRegressor e imprimirá el RMSE en la consola.
 
-#### b. Basic MLflow
+#### b. MLflow Básico
 
-To train a model with basic MLflow experiment tracking, run:
+Para entrenar un modelo con seguimiento básico de experimentos de MLflow, ejecuta:
 
 ```bash
 uv run python scripts/train_with_basic_mlflow.py
 ```
 
-This will log the model's parameters and metrics to the MLflow tracking server.
+Esto registrará los parámetros y métricas del modelo en el servidor de seguimiento de MLflow.
 
-#### c. Advanced MLflow (Hyperparameter Optimization)
+#### c. MLflow Avanzado (Optimización de Hiperparámetros)
 
-To run hyperparameter optimization with Optuna and log the results to MLflow, run:
+Para ejecutar optimización de hiperparámetros con Optuna y registrar los resultados en MLflow, ejecuta:
 
 ```bash
 uv run python scripts/train_with_full_mlflow.py
 ```
 
-### 4. Viewing the Results in the MLflow UI
+### 4. Visualizando los Resultados en la Interfaz de MLflow
 
-To view the results of your experiments, launch the MLflow UI:
+Para ver los resultados de tus experimentos, lanza la interfaz de usuario de MLflow:
 
 ```bash
 mlflow ui
 ```
 
-Then, open your web browser and navigate to `http://127.0.0.1:5000`.
+Luego, abre tu navegador web y navega a `http://127.0.0.1:5000`.
 
-## Notebooks
+## notebooks
 
-The `notebooks/` directory contains three notebooks that provide a more in-depth explanation of the concepts:
+El directorio `notebooks/` contiene tres notebooks que proporcionan una explicación más detallada de los conceptos:
 
-*   **01_experiment_tracking_intro.ipynb:** A conceptual overview of experiment tracking.
-*   **02_mlflow_basics.ipynb:** A hands-on introduction to MLflow.
-*   **03_mlflow_advanced.ipynb:** Covers more advanced MLflow features like hyperparameter optimization and model registration.
+* **01_experiment_tracking_intro.ipynb:** Una visión conceptual general del seguimiento de experimentos.
+* **02_mlflow_basics.ipynb:** Una introducción práctica a MLflow.
+* **03_mlflow_advanced.ipynb:** Cubre características más avanzadas de MLflow como optimización de hiperparámetros y registro de modelos.

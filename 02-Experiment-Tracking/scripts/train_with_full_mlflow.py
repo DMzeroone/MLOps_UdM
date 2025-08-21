@@ -1,14 +1,15 @@
 
 import os
 import pickle
+
 import click
-import numpy as np
 import mlflow
+import numpy as np
 import optuna
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 
-mlflow.set_tracking_uri("sqlite:///mlflow.db")
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
 mlflow.set_experiment("nyc-taxi-experiment-hpo")
 
 def load_pickle(filename: str):
@@ -50,4 +51,5 @@ def run_optimization(data_path: str):
     study.optimize(objective, n_trials=10)
 
 if __name__ == '__main__':
+    run_optimization()
     run_optimization()

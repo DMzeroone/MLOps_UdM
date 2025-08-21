@@ -1,13 +1,15 @@
 
 import os
 import pickle
+
 import click
-import numpy as np
 import mlflow
+import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 
-mlflow.set_tracking_uri("sqlite:///mlflow.db")
+# Connect to the MLflow UI server instead of local SQLite
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
 mlflow.set_experiment("nyc-taxi-experiment")
 
 def load_pickle(filename: str):
@@ -37,4 +39,5 @@ def run_train(data_path: str):
         print(f"RMSE: {rmse}")
 
 if __name__ == '__main__':
+    run_train()
     run_train()

@@ -238,3 +238,5 @@ settings_local.py
 # mlflow
 models/
 03-Orchestrarion/mlruns/
+
+*.html
