@@ -21,7 +21,7 @@ graph TD
     D --> E[Output Results]
     C --> F[Monitoring & Logs]
     C --> G[Cleanup Tasks]
-    
+
     H[Scheduler] --> C
     I[Prefect UI] --> C
 ```
@@ -187,7 +187,7 @@ LOG_LEVEL=INFO
     "trip_id": "trip_20250118_143022_000001",
     "batch_timestamp": "2025-01-18T14:30:22",
     "PULocationID": 161,
-    "DOLocationID": 236, 
+    "DOLocationID": 236,
     "trip_distance": 2.5,
     "pickup_datetime": "2025-01-18T14:30:22"
 }

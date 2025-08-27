@@ -1,57 +1,52 @@
-# 🚕 NYC Taxi Duration Prediction - Guía de Despliegue
+# 🚕 NYC Taxi Duration Prediction - Guía de Despliegue para Estudiantes
 
-Esta guía te ayudará a desplegar el servicio de predicción de duración de viajes de taxi de NYC paso a paso.
+Esta guía te ayudará a activar el entorno y desplegar el servicio de predicción de duración de viajes de taxi de NYC. **Las dependencias ya están gestionadas en el `pyproject.toml`**, solo necesitas activar el entorno con UV.
 
 ## 📋 Tabla de Contenidos
 
+- [Inicio Rápido](#inicio-rápido)
 - [Prerequisitos](#prerequisitos)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Instalación](#instalación)
-- [Configuración del Entorno](#configuración-del-entorno)
-- [Despliegue Local](#despliegue-local)
+- [Activación del Entorno](#activación-del-entorno)
+- [Despliegue del Servicio](#despliegue-del-servicio)
 - [Pruebas del Servicio](#pruebas-del-servicio)
-- [Monitoreo](#monitoreo)
 - [Troubleshooting](#troubleshooting)
-- [Despliegue en Producción](#despliegue-en-producción)
+
+## ⚡ Inicio Rápido
+
+**¿Tienes prisa? Ejecuta estos 3 comandos:**
+
+```bash
+cd 04-Deployment/deploy/web-service/
+uv sync
+uv run python predict.py
+```
+
+¡Listo! Tu servicio estará corriendo en http://localhost:9696
 
 ## 🔧 Prerequisitos
 
-Antes de comenzar, asegúrate de tener instalado:
+**Solo necesitas tener instalado:**
 
-- **Python 3.8+**
-- **uv** (gestor de paquetes y entornos virtuales moderno)
-- **Git** (para clonar el repositorio)
-- **curl** (para probar los endpoints)
+- **Python 3.8+** (ya deberías tenerlo)
+- **uv** (gestor de entornos virtuales moderno)
 
-### Verificar Instalaciones
+**Las dependencias del proyecto (Flask, scikit-learn, pandas, etc.) ya están definidas en `pyproject.toml` y se instalarán automáticamente.**
+
+### Verificar que tienes UV instalado
 
 ```bash
-# Verificar Python
-python --version
-# o
-python3 --version
-
 # Verificar uv
 uv --version
-
-# Verificar Git
-git --version
-
-# Verificar curl
-curl --version
+# Debe mostrar algo como: uv 0.x.x
 ```
 
-### Instalar uv (si no lo tienes)
+### Si no tienes UV, instálalo:
 
 ```bash
 # En macOS/Linux
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# En Windows (PowerShell)
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-
-# Con pip (alternativa)
-pip install uv
+# Reinicia tu terminal después de la instalación
 ```
 
 ## 📁 Estructura del Proyecto
@@ -59,93 +54,123 @@ pip install uv
 ```
 04-Deployment/deploy/web-service/
 ├── README.md              # Esta guía
-├── pyproject.toml         # Configuración uv y dependencias
-├── .python-version        # Versión de Python del proyecto
-├── predict.py             # Servicio Flask principal
-├── predict_test.py        # Módulo de testing sin servidor
-├── test.py               # Cliente de pruebas HTTP
-├── lin_reg.bin           # Modelo entrenado (pickle)
-├── main.py               # Punto de entrada alternativo
-└── .venv/                # Entorno virtual (creado automáticamente)
+├── pyproject.toml         # ✅ Dependencias ya configuradas
+├── .python-version        # ✅ Versión de Python definida
+├── predict.py             # 🎯 Servicio Flask principal
+├── test.py               # 🧪 Cliente de pruebas
+├── lin_reg.bin           # 🤖 Modelo entrenado
+└── .venv/                # 📦 Entorno virtual (se crea automáticamente)
 ```
 
-## 🚀 Instalación
+**Archivos importantes:**
+
+- `pyproject.toml`: Contiene todas las dependencias ya configuradas
+- `predict.py`: El servicio web que vas a ejecutar
+- `lin_reg.bin`: Modelo de ML pre-entrenado
+
+## 🚀 Activación del Entorno
 
 ### Paso 1: Navegar al Directorio del Proyecto
 
 ```bash
 # Navegar al directorio web-service
-cd /Users/mdurango/University/MLOps/04-Deployment/deploy/web-service/
+cd 04-Deployment/deploy/web-service/
 ```
 
-### Paso 2: El Entorno ya está Configurado
+### Paso 2: Activar el Entorno con UV
 
-El proyecto ya tiene configurado un entorno uv independiente con:
-- **pyproject.toml** - Configuración del proyecto y dependencias
-- **Entorno virtual** - Se crea automáticamente al ejecutar comandos
-- **Dependencias instaladas** - Flask, scikit-learn, pandas, numpy, requests, gunicorn
-
-### Paso 3: Verificar la Configuración
+**Las dependencias ya están configuradas. Solo necesitas activar el entorno:**
 
 ```bash
-# Verificar que uv detecta el proyecto
-uv info
+# Crear entorno virtual e instalar todas las dependencias automáticamente
+uv sync
 
-# Ver dependencias instaladas
+# ✅ Esto instalará: Flask, scikit-learn, pandas, numpy, gunicorn, etc.
+# ✅ Todo basado en el pyproject.toml ya configurado
+```
+
+### Paso 3: Verificar la Instalación
+
+```bash
+# Verificar que el entorno se creó
+ls -la .venv/  # Debe existir el directorio
+
+# Ver las dependencias instaladas
 uv tree
 ```
 
-### Instalar Dependencias Adicionales (si es necesario)
+## 🎯 Formas de Usar el Entorno
+
+### **Opción A: Con `uv run` (Más Fácil)**
 
 ```bash
-# Agregar nuevas dependencias
-uv add <package-name>
-
-# Instalar dependencias de desarrollo
-uv add --dev pytest black flake8
-
-# Instalar para producción
-uv add gunicorn
+# UV maneja todo automáticamente
+uv run python predict.py
+uv run python test.py
 ```
 
-### Ejecutar Comandos en el Entorno
+### **Opción B: Activar Manualmente**
 
 ```bash
-# Ejecutar cualquier comando Python con uv
+# Activar el entorno virtual
+source .venv/bin/activate
+
+# Ahora puedes usar comandos normales
+python predict.py
+gunicorn --bind 0.0.0.0:9696 --workers 4 predict:app
+
+# Para desactivar cuando termines
+deactivate
+```
+
+### **¿Cuál usar?**
+
+- **`uv run`**: Más fácil, no necesitas activar/desactivar
+- **`source .venv/bin/activate`**: Más tradicional, útil si vas a ejecutar varios comandos
+
+## 🌐 Despliegue del Servicio
+
+### Método 1: Servidor de Desarrollo (Recomendado para Aprender)
+
+```bash
+# Ejecutar el servidor Flask
 uv run python predict.py
 
-# Ejecutar scripts directamente
-uv run python test.py
-
-# Ver información del proyecto
-uv info
+# O si tienes el entorno activado:
+python predict.py
 ```
 
-## ⚙️ Configuración del Entorno
+**Verás algo como:**
 
-### Verificar el Proyecto uv
-
-```bash
-# Ver información del proyecto
-uv info
-
-# Ver dependencias instaladas
-uv tree
-
-# Ver archivos del proyecto
-ls -la
+```
+INFO:__main__:🔄 Loading model and DictVectorizer...
+INFO:__main__:✅ Model and DV loaded successfully
+INFO:__main__:🚀 Starting Flask server on port 9696...
+ * Running on http://127.0.0.1:9696
 ```
 
-### Verificar el Modelo
-
-Asegúrate de que el archivo `lin_reg.bin` esté presente:
+### Método 2: Servidor de Producción (Gunicorn)
 
 ```bash
-# Verificar que el modelo existe
+# Con UV (recomendado)
+uv run gunicorn --bind 0.0.0.0:9696 --workers 4 predict:app
+
+# O con entorno activado
+source .venv/bin/activate
+gunicorn --bind 0.0.0.0:9696 --workers 4 predict:app
+```
+
+### ✅ Verificar que Todo Funciona
+
+```bash
+# 1. Verificar que el modelo existe
 ls -la lin_reg.bin
 
-# Si el archivo existe, deberías ver algo como:
-# -rw-r--r-- 1 user user 411363 fecha lin_reg.bin
+# 2. Verificar que el entorno está activo
+which python  # Debe apuntar a .venv/bin/python
+
+# 3. Ver dependencias instaladas
+uv tree | head -10
 ```
 
 ### Probar la Carga del Modelo
@@ -203,12 +228,31 @@ flask run --host=0.0.0.0 --port=9696
 
 ### Método 3: Usando Gunicorn (Producción)
 
-```bash
-# Instalar Gunicorn
-uv add gunicorn
+**Opción A: Con UV (Recomendado)**
 
-# Ejecutar con Gunicorn
+```bash
+# Gunicorn ya está incluido en las dependencias del pyproject.toml
+# Ejecutar con UV
 uv run gunicorn --bind 0.0.0.0:9696 --workers 4 predict:app
+```
+
+**Opción B: Con Entorno Activado**
+
+```bash
+# Activar entorno virtual
+source .venv/bin/activate
+
+# Ejecutar Gunicorn directamente
+gunicorn --bind 0.0.0.0:9696 --workers 4 predict:app
+```
+
+**Probar el servicio:**
+
+```bash
+# En otra terminal, probar con curl
+curl -X POST http://localhost:9696/predict \
+  -H "Content-Type: application/json" \
+  -d '{"PULocationID": 161, "DOLocationID": 236, "trip_distance": 2.5}'
 ```
 
 ## 🧪 Pruebas del Servicio
@@ -261,6 +305,69 @@ curl -X POST http://localhost:9696/predict \
 # Ejecutar cliente de pruebas automatizado
 uv run python test.py
 ```
+
+## 📊 Entender el Entorno UV
+
+### ¿Qué hace UV?
+
+- **Gestiona dependencias** automáticamente
+- **Crea entornos virtuales** sin configuración manual
+- **Ejecuta comandos** en el entorno correcto
+
+### Comandos UV útiles
+
+```bash
+uv info          # Ver información del proyecto
+uv tree          # Ver dependencias instaladas
+uv run <comando> # Ejecutar comando en el entorno
+uv add <paquete> # Añadir nueva dependencia
+uv sync          # Instalar/actualizar dependencias
+```
+
+### ¿Cuándo usar cada comando?
+
+
+| Situación       | Comando                    |
+| ---------------- | -------------------------- |
+| Primera vez      | `uv sync`                  |
+| Ejecutar app     | `uv run python predict.py` |
+| Añadir paquete  | `uv add requests`          |
+| Ver dependencias | `uv tree`                  |
+
+## 🎯 Flujo Típico de Trabajo
+
+1. **Clonar/descargar** el proyecto
+2. **Navegar** al directorio: `cd 04-Deployment/deploy/web-service/`
+3. **Instalar** dependencias: `uv sync`
+4. **Levantar** servicio: `uv run python predict.py`
+5. **Probar** en otra terminal: `curl http://localhost:9696/health`
+6. **Hacer predicciones** con POST requests
+
+## 💡 Tips para Estudiantes
+
+### ✅ Buenas Prácticas
+
+- Siempre usar `uv run` para ejecutar comandos
+- Verificar que el modelo existe antes de levantar el servicio
+- Probar con health check antes de hacer predicciones
+- Leer los logs para entender qué está pasando
+
+### ❌ Errores Comunes
+
+- No estar en el directorio correcto
+- Olvidar hacer `uv sync` primero
+- Intentar usar pip en lugar de uv
+- No verificar que el puerto esté libre
+
+## 🏆 Objetivos de Aprendizaje
+
+Al completar este ejercicio deberías entender:
+
+1. **Gestión de entornos** con UV
+2. **Despliegue de APIs** con Flask/Gunicorn
+3. **Testing de servicios** con curl
+4. **Troubleshooting** de problemas comunes
+5. **Diferencias** entre desarrollo y producción
 
 **Salida esperada:**
 
@@ -328,48 +435,9 @@ INFO:__main__:✅ Response sent: 12.34 minutes
 }
 ```
 
-## 🔧 Troubleshooting
+## 🆘 Troubleshooting - Problemas Comunes
 
-### Problema 1: "lin_reg.bin file not found"
-
-**Síntomas:**
-
-```
-ERROR:__main__:❌ Error: lin_reg.bin file not found
-```
-
-**Solución:**
-
-```bash
-# Verificar que el archivo existe en el directorio correcto
-ls -la lin_reg.bin
-
-# Si no existe, necesitas entrenar el modelo primero
-# o copiar el archivo desde otro directorio
-```
-
-### Problema 2: "Port already in use"
-
-**Síntomas:**
-
-```
-OSError: [Errno 48] Address already in use
-```
-
-**Solución:**
-
-```bash
-# Encontrar el proceso usando el puerto 9696
-lsof -i :9696
-
-# Terminar el proceso
-kill -9 <PID>
-
-# O usar un puerto diferente
-python predict.py --port 9697
-```
-
-### Problema 3: Errores de Dependencias
+### Error: "No module named 'flask'"
 
 **Síntomas:**
 
@@ -380,21 +448,72 @@ ModuleNotFoundError: No module named 'flask'
 **Solución:**
 
 ```bash
-# Verificar que el entorno virtual está activado
-which python
+# Instalar dependencias
+uv sync
 
-# Reinstalar dependencias
-pip install -r requirements.txt
+# Si persiste, recrear entorno
+rm -rf .venv/
+uv sync
 ```
 
-### Problema 4: Errores de Predicción
+### Error: "Port already in use"
+
+**Síntomas:**
+
+```
+OSError: [Errno 48] Address already in use
+```
+
+**Solución:**
+
+```bash
+# Ver qué usa el puerto
+lsof -i :9696
+
+# Matar proceso
+kill -9 <PID>
+```
+
+### Error: "lin_reg.bin not found"
+
+**Síntomas:**
+
+```
+ERROR:__main__:❌ Error: lin_reg.bin file not found
+```
+
+**Solución:**
+
+```bash
+# Verificar que estás en el directorio correcto
+pwd  # Debe terminar en /web-service/
+ls lin_reg.bin  # Debe existir
+```
+
+### Error: Gunicorn no encuentra módulo
+
+**Síntomas:**
+
+```
+ModuleNotFoundError: No module named 'predict'
+```
+
+**Solución:**
+
+```bash
+# Asegúrate de estar en el directorio correcto
+cd 04-Deployment/deploy/web-service/
+
+# Usar comando completo
+uv run gunicorn --bind 0.0.0.0:9696 --workers 4 predict:app
+```
+
+### Error: Predicción fallida
 
 **Síntomas:**
 
 ```json
-{
-  "error": "Missing required field: PULocationID"
-}
+{"error": "Missing required field: PULocationID"}
 ```
 
 **Solución:**
@@ -403,25 +522,42 @@ pip install -r requirements.txt
 - Verificar el Content-Type header: `application/json`
 - Verificar que los valores son del tipo correcto (int/float)
 
-## 🚀 Despliegue en Producción
+## 📞 Ayuda Adicional
 
-### Opción 1: Docker
+Si tienes problemas:
+
+1. **Lee los logs** completos del error
+2. **Verifica prerequisitos** (Python, UV, directorio)
+3. **Pregunta al profesor** con el error específico
+
+## 🚀 Despliegue en Producción (Opcional)
+
+### Opción 1: Docker con UV
 
 ```bash
-# Crear Dockerfile
+# Crear Dockerfile optimizado para UV
 cat > Dockerfile << EOF
-FROM python:3.9-slim
+FROM python:3.11-slim
+
+# Instalar UV
+RUN pip install uv
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+# Copiar archivos de configuración
+COPY pyproject.toml ./
+COPY .python-version ./
 
+# Crear entorno e instalar dependencias
+RUN uv sync --no-dev
+
+# Copiar código fuente
 COPY . .
 
 EXPOSE 9696
 
-CMD ["gunicorn", "--bind", "0.0.0.0:9696", "--workers", "4", "predict:app"]
+# Ejecutar con UV
+CMD ["uv", "run", "gunicorn", "--bind", "0.0.0.0:9696", "--workers", "4", "predict:app"]
 EOF
 
 # Construir imagen
@@ -477,6 +613,13 @@ export WORKERS=4
 # Ver procesos de Python
 ps aux | grep python
 
+# Verificar entorno UV activo
+uv info
+echo $VIRTUAL_ENV
+
+# Ver dependencias instaladas
+uv tree
+
 # Monitorear logs en tiempo real
 tail -f /var/log/taxi-prediction.log
 
@@ -485,6 +628,10 @@ htop
 
 # Hacer múltiples requests de prueba
 for i in {1..10}; do curl -X POST http://localhost:9696/predict -H "Content-Type: application/json" -d '{"PULocationID": 161, "DOLocationID": 236, "trip_distance": 2.5}'; done
+
+# Recrear entorno si hay problemas
+rm -rf .venv/
+uv sync
 ```
 
 ### Mejores Prácticas
@@ -500,9 +647,7 @@ for i in {1..10}; do curl -X POST http://localhost:9696/predict -H "Content-Type
 
 * Implementar autenticación (capas de seguridad)
 * Generar board con métricas del sistema (cantidad de instancias, responses, memoria, tiempos de respuesta) - [DataDog](https://docs.datadoghq.com/es/getting_started/application/)
-
 * Agregar tests unitarios
-
 * Configurar CI/CD pipeline
 
 ## 🆘 Soporte
