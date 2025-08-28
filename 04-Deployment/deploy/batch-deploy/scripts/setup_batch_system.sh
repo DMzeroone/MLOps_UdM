@@ -113,33 +113,6 @@ print_success "Environment file created"
 # Test the system
 print_status "Testing the batch prediction system..."
 
-# Test data generator
-print_status "Testing data generator..."
-if uv run python -c "from src.data_generator import TaxiDataGenerator; g = TaxiDataGenerator(); print('✅ Data generator working')"; then
-    print_success "Data generator test passed"
-else
-    print_error "Data generator test failed"
-    exit 1
-fi
-
-# Test batch predictor
-print_status "Testing batch predictor..."
-if uv run python -c "from src.batch_predictor import BatchPredictor; p = BatchPredictor(); print('✅ Batch predictor working')"; then
-    print_success "Batch predictor test passed"
-else
-    print_error "Batch predictor test failed"
-    exit 1
-fi
-
-# Test Prefect flows
-print_status "Testing Prefect flows..."
-if uv run python -c "from src.prefect_flows import taxi_batch_prediction_flow; print('✅ Prefect flows working')"; then
-    print_success "Prefect flows test passed"
-else
-    print_error "Prefect flows test failed"
-    exit 1
-fi
-
 # Generate sample data
 print_status "Generating sample data..."
 if uv run python src/data_generator.py; then

@@ -78,14 +78,14 @@ uv run prefect server start
 
 *Deja esta terminal corriendo - verás logs de Prefect aquí*
 
-* [ ]  Paso 3: Ejecutar el pipeline (en nueva terminal)
+- [ ]  Paso 3: Ejecutar el pipeline (en nueva terminal)
 
 **🖥️ Terminal 2 - Pipeline:**
 
 ```bash
 cd /Users/mdurango/University/MLOps/03-Orchestrarion/Prefect-pipelines
 
-# Configurar Prefect
+# Configurar Prefect: para añadir variable de enterno
 uv run prefect config set PREFECT_API_URL=http://127.0.0.1:4200/api
 
 # Ejecutar con datos por defecto (2023, enero)
@@ -284,6 +284,7 @@ Si se te presenta problemas con el port, usa lsof -i :--port
 ## 🛑 Detener Todo
 
 ### Detener Prefect Server
+
 ```bash
 # Encontrar y matar proceso Prefect
 pkill -f "prefect server"
@@ -294,6 +295,7 @@ kill [PID]
 ```
 
 ### Detener MLflow (si lo iniciaste)
+
 ```bash
 # Si iniciaste MLflow UI
 pkill -f "mlflow ui"
@@ -304,6 +306,7 @@ pkill -f "mlflow ui"
 ### Iniciar solo para ver dashboards (sin ejecutar pipeline)
 
 **Ver experimentos en MLflow:**
+
 ```bash
 cd /Users/mdurango/University/MLOps/03-Orchestrarion/Prefect-pipelines
 
@@ -314,6 +317,7 @@ uv run mlflow ui --backend-store-uri sqlite:///mlflow.db --port 5000
 ```
 
 **Ver runs anteriores en Prefect:**
+
 ```bash
 # Iniciar Prefect server
 uv run prefect server start --port 4201
@@ -325,6 +329,7 @@ uv run prefect config set PREFECT_API_URL=http://127.0.0.1:4201/api
 ```
 
 ### Archivos que siempre están disponibles
+
 ```bash
 # Ver archivos generados
 ls -la models/          # preprocessor.b
