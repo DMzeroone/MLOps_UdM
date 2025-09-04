@@ -4,9 +4,11 @@
 
 ## 👨‍🏫 Tus Instructores
 
-### 🌟 **[Teo](https://www.linkedin.com/in/mateo-cano-solis/)**
+### 🌟 **[Mate](https://www.linkedin.com/in/mateo-cano-solis/)**
 
-Experto en MLOps y arquitectura de sistemas de machine learning. Con amplia experiencia en el diseño e implementación de pipelines de ML en producción, Teo te guiará a través de las mejores prácticas de la industria y las herramientas más modernas del ecosistema MLOps.
+Soy Data Scientist especializado en Machine Learning y Deep Learning a gran escala, con experiencia en personalización, sistemas de recomendación y optimización del ciclo de vida del cliente. En MercadoLibre he trabajado diseñando e implementando modelos de ranking para RecSys, así como en proyectos de Marketing Analytics orientados a la adquisición de usuarios, el aumento del engagement y la reducción del churn en MercadoPago.
+
+A lo largo de estas experiencias, la práctica de MLOps se volvió esencial para poder sostener una experimentación continua, escalable y reproducible, lo que me motivó a profundizar en su adopción y a compartir estas prácticas en este curso.
 
 ### 🌟 **[Maca](https://www.linkedin.com/in/mar%C3%ADa-camila-durango-999224202/)**
 
