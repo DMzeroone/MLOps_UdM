@@ -124,22 +124,22 @@ Para el proyecto, deberás construir un proyecto de ML completo que incluya:
 - [ ] Automatizar proceso de entrenamiento
 - [ ] Implementar feature engineering
 - [ ] Crear pipeline de evaluación
-- [ ] Configurar retraining automático
+- [ ] Configurar retraining automático (Nice to have)
 
 ### Fase 4: Deployment
 
 #### 4.1 Containerización
 
 - [ ] Crear Dockerfile para la aplicación
-- [ ] Optimizar imagen Docker
+- [ ] Optimizar imagen Docker  (Nice to have)
 
-#### 4.2 API Development
+#### 4.2 API Development (si aplica)
 
 - [ ] Crear API REST con FastAPI
 - [ ] Implementar endpoints de predicción
 - [ ] Agregar validación de inputs
 
-#### 4.3 Cloud Deployment
+#### 4.3 Cloud Deployment  (Nice to have)
 
 - [ ] Configurar infraestructura en cloud
 - [ ] Implementar CI/CD pipeline
@@ -153,18 +153,17 @@ Para el proyecto, deberás construir un proyecto de ML completo que incluya:
 #### 6.1 Testing
 
 - [ ] Implementar unit tests
-- [ ] Implementar test coverage
 
 #### 6.2 Code Quality
 
 - [ ] Configurar linter (flake8, black)
 - [ ] Implementar formatter automático
-- [ ] Configurar pre-commit hooks
+- [ ] Configurar pre-commit hooks  (Nice to have)
 
 #### 6.3 Documentation
 
 - [ ] Crear README detallado
-- [ ] Documentar API endpoints
+- [ ] Documentar API endpoints (si aplica)
 - [ ] Crear guías de deployment
 
 ## Estructura del Repositorio Recomendada
