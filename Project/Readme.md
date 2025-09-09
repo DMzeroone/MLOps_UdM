@@ -1,4 +1,4 @@
-# Proyecto Final MLOps - Universidad de Montreal
+# Proyecto Final MLOps - Universidad de Medellin
 
 ## Objetivo
 
