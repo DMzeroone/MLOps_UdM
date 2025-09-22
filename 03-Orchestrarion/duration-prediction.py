@@ -4,15 +4,13 @@
 import pickle
 from pathlib import Path
 
+import mlflow
 import pandas as pd
 import xgboost as xgb
-
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.metrics import root_mean_squared_error
 
-import mlflow
-
-mlflow.set_tracking_uri("http://localhost:5000")
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
 mlflow.set_experiment("nyc-taxi-experiment")
 
 models_folder = Path('models')
