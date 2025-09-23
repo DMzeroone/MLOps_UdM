@@ -32,10 +32,10 @@ def run_train(data_path: str):
         y_pred = rf.predict(X_val)
 
         rmse = np.sqrt(mean_squared_error(y_val, y_pred))
-        
+
         mlflow.log_param("max_depth", 10)
         mlflow.log_metric("rmse", rmse)
-        
+
         print(f"RMSE: {rmse}")
 
 if __name__ == '__main__':
