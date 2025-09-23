@@ -12,7 +12,7 @@ A lo largo de estas experiencias, la práctica de MLOps se volvió esencial para
 
 ### 🌟 **[Maca](https://www.linkedin.com/in/mar%C3%ADa-camila-durango-999224202/)**
 
-MLOps Engineer y Software Engineer con 7 años de experiencia en desarrollo de producto y soluciones de alta calidad. He trabajado extensivamente en la **creación de pipelines de ML** y arquitectura de sistemas de machine learning. Actualmente trabajo en **Mercado Libre** en el equipo de recomendaciones del**** Marketplace, donde últimamente me he enfocado más en el lado del desarrollo de software. Amo codear y compartir todo lo que he aprendido sobre MLOps, desarrollo de software y arquitectura de sistemas en producción.
+* [ ]  MLOps Engineer y Software Engineer con 7 años de experiencia en desarrollo de producto y soluciones de alta calidad. He trabajado extensivamente en la **creación de pipelines de ML** y arquitectura de sistemas de machine learning. Actualmente trabajo en **Mercado Libre** en el equipo de recomendaciones del Marketplace, donde últimamente me he enfocado más en el lado del desarrollo de software. Amo codear y compartir todo lo que he aprendido sobre MLOps, desarrollo de software y arquitectura de sistemas en producción.
 
 ## 🎯 ¿Qué Aprenderás?
 
