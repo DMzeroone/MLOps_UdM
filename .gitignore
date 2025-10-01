@@ -104,7 +104,7 @@ dmypy.json
 *.tflite
 *.mlmodel
 *.model
-*.bin
+#*.bin
 *.npy
 *.npz
 *.mat
