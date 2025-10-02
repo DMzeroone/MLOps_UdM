@@ -105,6 +105,7 @@ dmypy.json
 *.mlmodel
 *.model
 #*.bin
+04-Deployment/deploy/web-service/images
 *.npy
 *.npz
 *.mat
