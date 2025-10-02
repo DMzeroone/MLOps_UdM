@@ -104,7 +104,8 @@ dmypy.json
 *.tflite
 *.mlmodel
 *.model
-*.bin
+#*.bin
+#04-Deployment/deploy/web-service/images
 *.npy
 *.npz
 *.mat
