@@ -28,7 +28,7 @@ Este documento explica los conceptos fundamentales del despliegue de servicios w
 - Define el formato exacto para enviar datos del viaje (origen, destino, distancia)
 - Especifica cómo se devolverán las predicciones
 
-![Concepto de API](https://i.imgur.com/8wqgQIL.png)
+![1759437984764](images/README_CONCEPTOS/1759437984764.png)
 
 ## 🌐 ¿Qué es un Servicio Web?
 
@@ -53,7 +53,12 @@ Este documento explica los conceptos fundamentales del despliegue de servicios w
 - Es accesible mediante solicitudes HTTP
 - Responde con datos en formato JSON
 
-![Servicio Web](https://i.imgur.com/JZwKlKR.png)
+![1759438040371](images/README_CONCEPTOS/1759438040371.png)
+
+![1759438067237](images/README_CONCEPTOS/1759438067237.png)
+
+
+![1759438081974](images/README_CONCEPTOS/1759438081974.png)
 
 ## 🎯 ¿Qué es un Endpoint?
 
@@ -70,8 +75,6 @@ Este documento explica los conceptos fundamentales del despliegue de servicios w
 
 - `/predict`: Endpoint para obtener predicciones (acepta POST)
 - `/health`: Endpoint para verificar el estado del servicio (acepta GET)
-
-![Endpoints](https://i.imgur.com/QZnLJtL.png)
 
 ## 👤 ¿Qué es un Cliente?
 
@@ -90,8 +93,6 @@ Este documento explica los conceptos fundamentales del despliegue de servicios w
 - Envía solicitudes al servicio de predicción
 - Procesa las respuestas recibidas
 
-![Cliente-Servidor](https://i.imgur.com/Y5HzLKP.png)
-
 ## 🔒 ¿Qué es el Protocolo HTTPS?
 
 **HTTPS** (HTTP Seguro) es un protocolo de comunicación que permite la transferencia segura de datos en la web.
@@ -108,8 +109,6 @@ Este documento explica los conceptos fundamentales del despliegue de servicios w
 - Previene ataques de intermediarios
 - Genera confianza en los usuarios
 - Es un estándar para servicios profesionales
-
-![HTTPS vs HTTP](https://i.imgur.com/8JY7zJf.png)
 
 ## 🏗️ Arquitectura de Nuestro Servicio
 
@@ -147,8 +146,6 @@ sequenceDiagram
 ```
 
 ### Visualización de la Arquitectura:
-
-![Arquitectura del Servicio](https://i.imgur.com/L2YGqWZ.png)
 
 ## 🚀 Ejemplo Práctico
 
