@@ -1,4 +1,4 @@
-# 🌐 Conceptos de Despliegue de Servicios Web
+# 🌐 Conceptos de Despliegue de Servicios Web para dummies
 
 Este documento explica los conceptos fundamentales del despliegue de servicios web, utilizando como ejemplo nuestro servicio de predicción de duración de viajes en taxi de NYC.
 
@@ -56,7 +56,6 @@ Este documento explica los conceptos fundamentales del despliegue de servicios w
 ![1759438040371](images/README_CONCEPTOS/1759438040371.png)
 
 ![1759438067237](images/README_CONCEPTOS/1759438067237.png)
-
 
 ![1759438081974](images/README_CONCEPTOS/1759438081974.png)
 
