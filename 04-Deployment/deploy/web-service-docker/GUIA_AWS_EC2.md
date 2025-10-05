@@ -5,6 +5,7 @@ Esta guía te ayudará a desplegar tu servicio de predicción de taxis en un ser
 ## 1. Conectarse a tu Instancia EC2
 
 ### Requisitos previos
+
 - Una instancia EC2 ya creada en AWS
 - El archivo .pem de tu clave privada
 - El DNS público de tu instancia (algo como `ec2-12-34-56-78.compute-1.amazonaws.com`)
@@ -12,13 +13,11 @@ Esta guía te ayudará a desplegar tu servicio de predicción de taxis en un ser
 ### Pasos para conectarte
 
 1. **Abre una terminal en tu computadora**
-
 2. **Cambia los permisos de tu archivo de clave**:
 
    ```bash
    chmod 400 tu-clave.pem
    ```
-
 3. **Conéctate a tu instancia EC2**:
 
    ```bash
@@ -26,6 +25,7 @@ Esta guía te ayudará a desplegar tu servicio de predicción de taxis en un ser
    ```
 
    > 💡 Reemplaza `tu-clave.pem` con el nombre de tu archivo de clave y la dirección con el DNS público de tu instancia.
+   >
 
 ## 2. Instalar Docker en EC2
 
@@ -37,6 +37,9 @@ sudo yum update -y
 
 # Instalar Docker
 sudo yum install -y docker
+
+# Install git
+sudo yum install -y git
 
 # Iniciar el servicio Docker
 sudo service docker start
@@ -77,15 +80,13 @@ docker run -d -p 9696:9696 --name taxi-service taxi-prediction
 Para permitir el tráfico externo a tu aplicación:
 
 1. **Ve a la consola de AWS** y selecciona tu instancia EC2
-
 2. **Haz clic en el grupo de seguridad** asociado a tu instancia
-
 3. **Añade una regla de entrada**:
+
    - Tipo: TCP personalizado
    - Rango de puertos: 9696
    - Origen: Anywhere (0.0.0.0/0)
    - Descripción: Taxi Prediction API
-
 4. **Guarda los cambios**
 
 ## 6. Probar el Servicio desde Postman
@@ -93,6 +94,7 @@ Para permitir el tráfico externo a tu aplicación:
 ### Obtener la URL de tu API
 
 La URL de tu API será:
+
 ```
 http://ec2-12-34-56-78.compute-1.amazonaws.com:9696
 ```
@@ -102,13 +104,13 @@ http://ec2-12-34-56-78.compute-1.amazonaws.com:9696
 ### Configurar Postman
 
 1. **Abre Postman** en tu computadora
-
 2. **Crea una nueva solicitud**:
+
    - Método: POST
    - URL: `http://ec2-12-34-56-78.compute-1.amazonaws.com:9696/predict`
    - Headers: Content-Type: application/json
-
 3. **Añade el cuerpo de la solicitud**:
+
    ```json
    {
      "PULocationID": 161,
@@ -116,8 +118,8 @@ http://ec2-12-34-56-78.compute-1.amazonaws.com:9696
      "trip_distance": 2.5
    }
    ```
-
 4. **Envía la solicitud** y deberías recibir una respuesta como:
+
    ```json
    {
      "duration": 12.34,
@@ -151,16 +153,17 @@ docker rm taxi-service
 ### El servicio no responde
 
 1. **Verifica que el contenedor esté en ejecución**:
+
    ```bash
    docker ps
    ```
-
 2. **Revisa los logs del contenedor**:
+
    ```bash
    docker logs taxi-service
    ```
-
 3. **Verifica que el puerto esté abierto**:
+
    ```bash
    sudo netstat -tulpn | grep 9696
    ```
