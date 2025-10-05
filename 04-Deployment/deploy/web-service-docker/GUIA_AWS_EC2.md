@@ -66,11 +66,20 @@ cd tu-repositorio/04-Deployment/deploy/web-service-docker
 ## 4. Construir y Ejecutar el Contenedor Docker
 
 ```bash
+
 # Construir la imagen Docker
 docker build -t taxi-prediction .
 
 # Ejecutar el contenedor
 docker run -d -p 9696:9696 --name taxi-service taxi-prediction
+
+docker ps
+
+docker logs -f taxi-service
+
+docker inspect taxi-service
+
+
 ```
 
 > 💡 La opción `-d` ejecuta el contenedor en segundo plano y `-p 9696:9696` mapea el puerto 9696 del contenedor al puerto 9696 de la instancia EC2.
